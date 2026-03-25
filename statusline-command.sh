@@ -81,8 +81,9 @@ else
 fi
 ctx_bar=$(make_bar $ctx_int)
 ctx_color=$(pct_color $ctx_int)
-ctx_plain=" [${ctx_bar}] ${ctx_int}% "
-ctx_colored=" ${ctx_color}[${ctx_bar}]${RESET} ${GRAY}${ctx_int}%${RESET} "
+ctx_pct=$(printf "%3d%%" $ctx_int)
+ctx_plain="${ctx_pct}[${ctx_bar}] "
+ctx_colored="${GRAY}${ctx_pct}${RESET}${ctx_color}[${ctx_bar}]${RESET} "
 
 # ── Model/effort (row 1 right cell) ───────────────────────────────────────────
 model_lower=$(echo "$model" | tr '[:upper:]' '[:lower:]')
@@ -149,8 +150,8 @@ fi
 repeat_char() { printf "%${2}s" | tr ' ' "$1"; }
 
 # Column widths = max of both rows
-lw1=${#ctx_plain}; lw2=${#fh_plain}
-rw1=${#mdl_plain}; rw2=${#sd_plain}
+lw1=${#mdl_plain}; lw2=${#fh_plain}
+rw1=${#ctx_plain}; rw2=${#sd_plain}
 lw=$(( lw1 > lw2 ? lw1 : lw2 ))
 rw=$(( rw1 > rw2 ? rw1 : rw2 ))
 
@@ -163,20 +164,20 @@ mdl_plain_padded=$(pad_right "$mdl_plain" $rw)
 sd_plain_padded=$(pad_right  "$sd_plain"  $rw)
 
 # For colored cells, append spaces to match target width
-ctx_pad=$(( lw - ${#ctx_plain} ))
+mdl_pad=$(( lw - ${#mdl_plain} ))
 fh_pad=$(( lw - ${#fh_plain} ))
-mdl_pad=$(( rw - ${#mdl_plain} ))
+ctx_pad=$(( rw - ${#ctx_plain} ))
 sd_pad=$(( rw - ${#sd_plain} ))
 
-ctx_cell="${ctx_colored}$(repeat_char ' ' $ctx_pad)"
-fh_cell="${fh_colored}$(repeat_char ' '  $fh_pad)"
 mdl_cell="${mdl_colored}$(repeat_char ' ' $mdl_pad)"
+fh_cell="${fh_colored}$(repeat_char ' '  $fh_pad)"
+ctx_cell="${ctx_colored}$(repeat_char ' ' $ctx_pad)"
 sd_cell="${sd_colored}$(repeat_char ' '  $sd_pad)"
 
 top="${BLUE}┌$(repeat_char '─' $lw)┬$(repeat_char '─' $rw)┐${RESET}"
 div="${BLUE}├$(repeat_char '─' $lw)┼$(repeat_char '─' $rw)┤${RESET}"
 bot="${BLUE}└$(repeat_char '─' $lw)┴$(repeat_char '─' $rw)┘${RESET}"
-row1="${BLUE}│${RESET}${ctx_cell}${BLUE}│${RESET}${mdl_cell}${BLUE}│${RESET}"
+row1="${BLUE}│${RESET}${mdl_cell}${BLUE}│${RESET}${ctx_cell}${BLUE}│${RESET}"
 row2="${BLUE}│${RESET}${fh_cell}${BLUE}│${RESET}${sd_cell}${BLUE}│${RESET}"
 
 # ── Line 1: user@hostname:path (branch) ───────────────────────────────────────
