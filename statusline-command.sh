@@ -73,7 +73,7 @@ fmt_duration() {
   fi
 }
 
-SEP="${GRAY}✖${RESET}"
+SEP="${GRAY}│${RESET}"
 
 # ── Model/effort ───────────────────────────────────────────────────────────────
 model_lower=$(echo "$model" | tr '[:upper:]' '[:lower:]')
