@@ -35,14 +35,15 @@ RESET=$'\033[0m'
 make_bar() {
   local pct=$1 style=${2:-block}
   local filled=$(( pct / 10 ))
+  if [ "$filled" -gt 10 ]; then filled=10; fi
   local empty=$(( 10 - filled ))
   local b=""
   if [ "$style" = "dot" ]; then
-    for i in $(seq 1 $filled); do b="${b}●"; done
-    for i in $(seq 1 $empty); do b="${b}○"; done
+    [ "$filled" -gt 0 ] && for i in $(seq 1 $filled); do b="${b}●"; done
+    [ "$empty"  -gt 0 ] && for i in $(seq 1 $empty);  do b="${b}○"; done
   else
-    for i in $(seq 1 $filled); do b="${b}█"; done
-    for i in $(seq 1 $empty); do b="${b}░"; done
+    [ "$filled" -gt 0 ] && for i in $(seq 1 $filled); do b="${b}█"; done
+    [ "$empty"  -gt 0 ] && for i in $(seq 1 $empty);  do b="${b}░"; done
   fi
   echo "$b"
 }
@@ -68,14 +69,15 @@ ctx_color() {
 make_ctx_bar() {
   local pct=$1 color=$2 style=${3:-block}
   local filled=$(( pct / 10 ))
+  if [ "$filled" -gt 10 ]; then filled=10; fi
   local empty=$(( 10 - filled ))
   local b=""
   if [ "$style" = "dot" ]; then
-    for i in $(seq 1 $filled); do b="${b}${color}●"; done
-    for i in $(seq 1 $empty); do b="${b}${GRAY}○"; done
+    [ "$filled" -gt 0 ] && for i in $(seq 1 $filled); do b="${b}${color}●"; done
+    [ "$empty"  -gt 0 ] && for i in $(seq 1 $empty);  do b="${b}${GRAY}○"; done
   else
-    for i in $(seq 1 $filled); do b="${b}${color}█"; done
-    for i in $(seq 1 $empty); do b="${b}${GRAY}░"; done
+    [ "$filled" -gt 0 ] && for i in $(seq 1 $filled); do b="${b}${color}█"; done
+    [ "$empty"  -gt 0 ] && for i in $(seq 1 $empty);  do b="${b}${GRAY}░"; done
   fi
   echo "$b"
 }
