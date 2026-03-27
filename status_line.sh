@@ -64,13 +64,19 @@ ctx_color() {
 }
 
 # Build a progress bar with colored filled blocks and gray empty blocks
+# style: block (default) or dot
 make_ctx_bar() {
-  local pct=$1 color=$2
+  local pct=$1 color=$2 style=${3:-block}
   local filled=$(( pct / 10 ))
   local empty=$(( 10 - filled ))
   local b=""
-  for i in $(seq 1 $filled); do b="${b}${color}█"; done
-  for i in $(seq 1 $empty); do b="${b}${GRAY}░"; done
+  if [ "$style" = "dot" ]; then
+    for i in $(seq 1 $filled); do b="${b}${color}●"; done
+    for i in $(seq 1 $empty); do b="${b}${GRAY}○"; done
+  else
+    for i in $(seq 1 $filled); do b="${b}${color}█"; done
+    for i in $(seq 1 $empty); do b="${b}${GRAY}░"; done
+  fi
   echo "$b"
 }
 
@@ -132,17 +138,18 @@ ctx_part="${ctx_bar}${RESET} ${ctx_c}${ctx_pct}${RESET}"
 now=$(date +%s)
 if [ -n "$five_hr_pct" ]; then
   fh_int=$(printf "%.0f" "$five_hr_pct")
-  fh_bar=$(make_bar $fh_int dot)
-  fh_color=$(pct_color $fh_int)
   if [ -n "$five_hr_reset" ]; then
     fh_left=$(fmt_duration $(( five_hr_reset - now )))
     fh_time_str=" (${fh_left})"
   else
     fh_time_str=""
   fi
-  fh_part="${GRAY}5h${RESET} ${fh_color}${fh_bar}${RESET}${GRAY}${fh_time_str}${RESET}"
+  fh_pct_str=$(printf "%2d%%" $fh_int)
+  fh_color=$(ctx_color $fh_int)
+  fh_bar=$(make_ctx_bar $fh_int "$fh_color" dot)
+  fh_part="${fh_color}${fh_pct_str}${RESET} ${fh_bar}${RESET}${GRAY}${fh_time_str}${RESET}"
 else
-  fh_part="${GRAY}5h —${RESET}"
+  fh_part="${GRAY} — —${RESET}"
 fi
 
 # ── Align col 1 widths so separators line up ──────────────────────────────────
