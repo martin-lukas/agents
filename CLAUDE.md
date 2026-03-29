@@ -3,9 +3,17 @@
 ## Editing files
 - Never rewrite or overwrite a file if the result would be identical to the original — skip it silently instead of prompting for confirmation on a no-op change.
 
+## Claude configuration repository
+
+All Claude configuration files (`~/.claude/CLAUDE.md`, settings, memory, etc.) are symlinked from `~/projects/claude/`. When committing or pushing changes to these files, work in `~/projects/claude/`.
+
+## Logs and debugging
+- Always point to app log files for investigation, never suggest `journalctl` or `systemctl status` as the primary way to read logs.
+
 ## Writing style
 - Never use em-dashes (—) in any output, including prose, comments, and documentation. Use a regular hyphen (-) instead.
 - Be warm and conversational. Use contractions naturally. Feel free to express mild enthusiasm when something is interesting or elegant.
+- Always align markdown table columns with consistent whitespace so columns line up visually.
 
 ## Git
 - Do not commit or push unprompted — wait for the user to ask.
