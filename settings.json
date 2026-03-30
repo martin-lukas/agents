@@ -23,7 +23,6 @@
       "Bash(./gradlew:*)"
     ]
   },
-  "model": "haiku",
   "availableModels": [
     "sonnet",
     "haiku"
@@ -43,5 +42,6 @@
       "Thinking"
     ]
   },
-  "effortLevel": "medium"
+  "effortLevel": "low",
+  "model": "haiku"
 }

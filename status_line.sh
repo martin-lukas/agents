@@ -56,15 +56,23 @@ pct_color() {
   else echo "$GREEN"; fi
 }
 
-# Color for context usage: gray <50%, orange 50-69%, red ≥70%
+# Color for context usage: green <50%, orange 50-69%, red ≥70%
 ctx_color() {
+  local pct=$1
+  if [ "$pct" -ge 70 ]; then echo "$RED"
+  elif [ "$pct" -ge 50 ]; then echo "$ORANGE"
+  else echo "$GREEN"; fi
+}
+
+# Color for 5h rate limit: gray <50%, orange 50-69%, red ≥70%
+fh_color() {
   local pct=$1
   if [ "$pct" -ge 70 ]; then echo "$RED"
   elif [ "$pct" -ge 50 ]; then echo "$ORANGE"
   else echo "$GRAY"; fi
 }
 
-# Build a progress bar with colored filled blocks and gray empty blocks
+# Build a progress bar with colored filled blocks and same-color empty blocks
 # style: block (default) or dot
 make_ctx_bar() {
   local pct=$1 color=$2 style=${3:-block}
@@ -74,10 +82,10 @@ make_ctx_bar() {
   local b=""
   if [ "$style" = "dot" ]; then
     [ "$filled" -gt 0 ] && for i in $(seq 1 $filled); do b="${b}${color}●"; done
-    [ "$empty"  -gt 0 ] && for i in $(seq 1 $empty);  do b="${b}${GRAY}○"; done
+    [ "$empty"  -gt 0 ] && for i in $(seq 1 $empty);  do b="${b}${color}○"; done
   else
     [ "$filled" -gt 0 ] && for i in $(seq 1 $filled); do b="${b}${color}█"; done
-    [ "$empty"  -gt 0 ] && for i in $(seq 1 $empty);  do b="${b}${GRAY}░"; done
+    [ "$empty"  -gt 0 ] && for i in $(seq 1 $empty);  do b="${b}${color}░"; done
   fi
   echo "$b"
 }
@@ -106,8 +114,8 @@ strip_ansi() { printf '%s' "$1" | sed 's/\x1b\[[0-9;]*m//g'; }
 # ── Model/effort ───────────────────────────────────────────────────────────────
 model_lower=$(echo "$model" | tr '[:upper:]' '[:lower:]')
 if echo "$model_lower" | grep -q "haiku";  then model_color="$GREEN"
-elif echo "$model_lower" | grep -q "sonnet"; then model_color="$ORANGE"
-elif echo "$model_lower" | grep -q "opus";   then model_color="$RED"
+elif echo "$model_lower" | grep -q "sonnet"; then model_color="$BLUE"
+elif echo "$model_lower" | grep -q "opus";   then model_color="$ORANGE"
 else model_color="$RESET"; fi
 
 case "$effort" in
@@ -116,6 +124,11 @@ case "$effort" in
   high)   effort_color="$RED" ;;
   *)      effort_color="$RESET" ;;
 esac
+
+# Don't show effort for Haiku (doesn't support it)
+if echo "$model_lower" | grep -q "haiku"; then
+  effort=""
+fi
 
 if [ -n "$model" ] && [ -n "$effort" ]; then
   mdl_part="${model_color}${model}${RESET} (${effort_color}${effort}${RESET})"
@@ -147,7 +160,7 @@ if [ -n "$five_hr_pct" ]; then
     fh_time_str=""
   fi
   fh_pct_str=$(printf "%2d%%" $fh_int)
-  fh_color=$(ctx_color $fh_int)
+  fh_color=$(fh_color $fh_int)
   fh_bar=$(make_ctx_bar $fh_int "$fh_color" dot)
   fh_part="${fh_color}${fh_pct_str}${RESET} ${fh_bar}${RESET}${GRAY}${fh_time_str}${RESET}"
 else
@@ -163,8 +176,8 @@ elif [ "$ctx_len" -gt "$mdl_len" ]; then
   mdl_part="${mdl_part}$(printf '%*s' $(( ctx_len - mdl_len )) '')"
 fi
 
-# ── Line 1: model/effort │ user@hostname:path (branch) ────────────────────────
-loc="${GREEN}${user}@${hostname}${RESET}:${BLUE}${display_path}${RESET}"
+# ── Line 1: model/effort │ hostname:path (branch) ────────────────────────
+loc="${GREEN}${hostname}${RESET}:${BLUE}${display_path}${RESET}"
 if [ -n "$git_branch" ]; then
   loc="${loc} ${YELLOW}(${git_branch})${RESET}"
 fi
