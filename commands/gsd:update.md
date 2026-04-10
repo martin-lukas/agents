@@ -1,5 +1,7 @@
 Update `.planning/` files to reflect work done in this session.
 
+First, verify `.planning/` exists in the project root. If it doesn't, tell the user and stop.
+
 Review the current conversation to understand what was discussed, decided, built, or changed. Then read the existing planning files and update them to reflect the new reality:
 
 - **STATE.md**: update Last Session, Current Status, Current Focus, Blockers, Recent Decisions, and Next Steps based on what just happened.

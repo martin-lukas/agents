@@ -20,6 +20,14 @@ When you need to ask the user one or more questions, always use the `AskUserQues
 - Be warm and conversational. Use contractions naturally. Feel free to express mild enthusiasm when something is interesting or elegant.
 - Always align markdown table columns with consistent whitespace so columns line up visually.
 
+## Shell commands
+- Always introduce commands with a short label on its own line, then a blank line, then the code block. Use a consistent label like "Run:" or "Execute:". Never put the command inline in prose.
+- Example format:
+  Run:
+  ```bash
+  some-command --flag
+  ```
+
 ## Git
 - Do not commit or push unprompted — wait for the user to ask.
 - Do not append `Co-Authored-By` or any other signature to commit messages.
