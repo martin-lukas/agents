@@ -16,4 +16,4 @@ If you derived facts from the code, show your understanding briefly and let the 
 - Keep drilling until you have enough specificity to write useful, non-placeholder content. Don't accept "it should be fast" - ask what fast means in this context.
 - Ask follow-ups one at a time, not as a new batch.
 
-Once answers are solid, read `~/projects/claude/templates/planning/` for structure, create `.planning/`, populate the requested files with all known information (no unfilled placeholders), and tell the user what was created.
+Once answers are solid, read `~/.claude/templates/planning/` for structure, create `.planning/`, populate the requested files with all known information (no unfilled placeholders), and tell the user what was created.

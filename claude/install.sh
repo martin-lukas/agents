@@ -21,4 +21,5 @@ link() {
 link "CLAUDE.md"
 link "settings.json"
 link "commands"
-link "hooks"
+link "templates"
+link "status_line.sh"

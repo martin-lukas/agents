@@ -6,7 +6,7 @@
 
 ## Claude configuration repository
 
-All Claude configuration files (`~/.claude/CLAUDE.md`, settings, memory, etc.) are symlinked from `~/projects/claude/`. When committing or pushing changes to these files, work in `~/projects/claude/`.
+All Claude configuration files (`~/.claude/CLAUDE.md`, settings, memory, etc.) are symlinked from `~/projects/agents/claude/`. When committing or pushing changes to these files, work in `~/projects/agents/`.
 
 ## Logs and debugging
 - Always point to app log files for investigation, never suggest `journalctl` or `systemctl status` as the primary way to read logs.
@@ -70,7 +70,7 @@ The meaningful record of what was decided and done belongs in `.planning/` as us
 ## Templates
 
 Starter templates for all planning files and project-level CLAUDE.md live at:
-`~/projects/claude/templates/`
+`~/.claude/templates/`
 
 - `templates/CLAUDE.md`              — project conventions (style, naming, commits)
 - `templates/planning/PROJECT.md`    — what the project is, decisions, constraints
@@ -82,3 +82,4 @@ When the user asks to set up planning files or initialise a new project, use the
 templates as the basis. Copy and fill them in based on what the user has told you
 about the project — do not leave placeholder text unfilled where the information
 is already known.
+known.
